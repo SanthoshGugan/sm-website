@@ -1,17 +1,14 @@
+import { Route, RouterProvider, Routes } from 'react-router-dom';
 import './App.css';
 
 import Header from './component/Header';
-import Posts from './component/Posts';
-import User from './component/User';
+import { router } from './routes/RouteProvider';
 
 function App() {
   return (
     <div className="App">
       <Header></Header>
-      <Posts></Posts>
-      <div>
-        <User></User>
-      </div>
+      <RouterProvider router={router} />
     </div>
   );
 }

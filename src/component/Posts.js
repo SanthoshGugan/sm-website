@@ -4,9 +4,9 @@ import React from 'react';
 const Posts = () => {
     // const user = useSelector(state => state.user?.user);
     return (
-        <>
+        <div>
             Posts
-        </>
+        </div>
     );
 };
 
