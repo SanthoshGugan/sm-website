@@ -1,25 +1,13 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import { AppBar } from '@mui/material';
+import React from 'react';
 
 const Header = (props) => {
    return ( 
-   <>
+   <AppBar position='static'>
         Social Media Header Component
-    </>
+    </AppBar>
     );
 };
 
 
-const mapStateToProps = (state) => {
-    return {
-        user: state?.user
-    }
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default Header;

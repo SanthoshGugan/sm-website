@@ -5,7 +5,7 @@ const userApiUrl = "http://localhost:8080/users";
 export const fetch = createAsyncThunk(
     'user/fetchUser', 
     async id => {
-        const response = await axios.get(`${userApiUrl}/${id}`)
+        const response = await axios.get(`${userApiUrl}/${id}`);
         return response.data;
 });
 

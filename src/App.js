@@ -3,13 +3,22 @@ import './App.css';
 
 import Header from './component/Header';
 import { router } from './routes/RouteProvider';
+import { Box, Card, Container } from '@mui/material';
 
 function App() {
   return (
-    <div className="App">
+    <Box className="App">
       <Header></Header>
-      <RouterProvider router={router} />
-    </div>
+      <div sx={{ 
+        display: 'flex', 
+        justifyContent: 'center',
+        margin: '1rem 0' 
+        }}>
+        <Card sx={{ flex: '0 1 65%'}}>
+          <RouterProvider router={router} />
+        </Card>
+      </div>
+    </Box>
   );
 }
 
