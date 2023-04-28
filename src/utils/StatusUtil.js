@@ -3,4 +3,4 @@ export const STATUS = {
     LOADING: 'loading',
     SUCCEED: 'succeeded',
     FAILED: 'failed'
-}
+};

@@ -4,7 +4,8 @@ import { fetch, post, del, update } from "../api/UserApis";
 const initialState = {
     user: {},
     status: 'idle',
-    error: null
+    error: null,
+    loggedInStatus: false
 };
 
 const reducers = {
@@ -24,14 +25,19 @@ const reducers = {
 
 const extraReducers = builder => {
     builder
-    .addCase(fetch.pending, (state) => {state.status = 'loading';})
+    .addCase(fetch.pending, (state) => {
+        state.status = 'loading';
+        state.loggedInStatus = false;
+    })
     .addCase(fetch.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.user = action.payload;
+        state.loggedInStatus = true;
     })
     .addCase(fetch.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+        state.loggedInStatus = false;
     })
 
     // [post.pending]: (state) => state.status = 'loading',
@@ -78,9 +84,6 @@ export const {
     userDeleted,
     userUpdated
 } = userSlice.actions;
-
-console.log("actions : " + fetch.pending);
-console.log("slice : " + JSON.stringify(userSlice));
 
 export const fetchUserAsync = (id) => async dispatch => {
     dispatch(fetch.pending);
