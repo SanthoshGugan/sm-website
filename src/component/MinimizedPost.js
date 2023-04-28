@@ -1,9 +1,25 @@
-import { Avatar, Icon, IconButton, Paper } from "@mui/material";
+import { Avatar, Icon, IconButton, Paper, Tooltip } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from "react";
-import { BorderColor } from "@mui/icons-material";
+import { useHistory, useNavigate } from 'react-router-dom';
+import CropFreeIcon from '@mui/icons-material/CropFree';
 
-const MinimizedPost = () => {
+import { getPostInitial } from "../utils/postUtil";
+
+const MinimizedPost = (props) => {
+
+    const navigate = useNavigate();
+    const { post = {} } = props;
+
+    const { 
+        authorName = "",
+        content = "",
+        id
+    } = post;
+
+    const onViewPostClick = (e) => {
+        navigate(`/post/${id}`);
+    }
 
     return(
         <Paper sx={{ 
@@ -12,7 +28,8 @@ const MinimizedPost = () => {
             margin: '0 5rem'
         }}>
             <div style={{
-                flex: '0 1 25%'
+                flex: '0 1 25%',
+                borderBottom: ""
                 }}
             > 
                 <div
@@ -30,8 +47,8 @@ const MinimizedPost = () => {
                         alignItems: 'center',
                         gap: '1rem'
                     }}>
-                        <Avatar sx={{ bgcolor: "darkblue"}}>S</Avatar>
-                        <div>Santhosh Gugan</div>
+                        <Avatar sx={{ bgcolor: "darkblue"}}>{getPostInitial(authorName)}</Avatar>
+                        <div>{authorName}</div>
                     </div>
                     <div>
                     <IconButton aria-label="Example">
@@ -46,7 +63,21 @@ const MinimizedPost = () => {
                 margin: '1rem',
                 justifyContent: 'flex-start'
             }}
-            > content</div>
+            > {content}</div>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    margin: '0 2rem 1rem 0'
+                }}
+            >
+                <Tooltip title="View Post">
+                    <IconButton onClick={e => onViewPostClick(e)}>
+                        <CropFreeIcon  />
+                    </IconButton>
+                </Tooltip>
+                
+            </div>
         </Paper>
     );
 };
