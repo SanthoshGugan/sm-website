@@ -5,11 +5,13 @@ import { useHistory, useNavigate } from 'react-router-dom';
 import CropFreeIcon from '@mui/icons-material/CropFree';
 
 import { getPostInitial } from "../utils/postUtil";
+import PostHeader from "./PostHeader";
+import { STATUS } from "../utils/StatusUtil";
 
 const MinimizedPost = (props) => {
 
     const navigate = useNavigate();
-    const { post = {} } = props;
+    const { post = {}, postStatus: status = STATUS.IDLE } = props;
 
     const { 
         authorName = "",
@@ -28,34 +30,10 @@ const MinimizedPost = (props) => {
             margin: '0 5rem'
         }}>
             <div style={{
-                flex: '0 1 25%',
-                borderBottom: ""
+                flex: '0 1 25%'
                 }}
             > 
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        margin: '0.5rem 1rem',
-                        alignContent: 'center',
-                        borderBottom: '1.5px none grey'
-                    }}
-                >
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        gap: '1rem'
-                    }}>
-                        <Avatar sx={{ bgcolor: "darkblue"}}>{getPostInitial(authorName)}</Avatar>
-                        <div>{authorName}</div>
-                    </div>
-                    <div>
-                    <IconButton aria-label="Example">
-                        <MoreVertIcon />
-                    </IconButton>
-                    </div>
-                </div>
+                <PostHeader post={post}/>
             </div>
             <div style={{
                 flex: '1 0.25 100px',

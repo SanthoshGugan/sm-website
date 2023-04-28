@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import MinimizedPost from './MinimizedPost';
-import { Box, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFeed } from '../api/PostApis';
+import { fetchFeed } from '../reducer/PostReducer';
 
 const Posts = () => {
     const { feed } = useSelector(state => state.post);
@@ -15,7 +14,7 @@ const Posts = () => {
         <div style={{
             margin: '1rem 0'
         }}>
-            {feed.map(post => (<MinimizedPost post={post}/>))}
+            {feed.map(post => (<MinimizedPost post={post} key={post.id}/>))}
             
         </div>
     );

@@ -1,13 +1,9 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const postApiUrl = "http://localhost:8080/post/feed";
+const postApiUrl = "http://localhost:8080/post";
 
-export const fetchFeed = createAsyncThunk(
-    'posts/feed',
-    async id => {
-        const resp = await axios.get(`${postApiUrl}/${id}`);
-        return resp.data;
-    }
-);
+
+export const feedsApi = async (id) => axios.get(`${postApiUrl}/feeds/${id}`);
+
+export const fetchFeedApi = async (id) => axios.get(`${postApiUrl}/feed/${id}`)
 
