@@ -1,4 +1,4 @@
-import { Route, RouterProvider, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Router, RouterProvider, Routes } from 'react-router-dom';
 import './App.css';
 
 import Header from './component/Header';
@@ -8,18 +8,7 @@ import { Box, Card } from '@mui/material';
 function App() {
   return (
     <Box className="App">
-      <Header></Header>
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center',
-        backgroundColor: '#fcfafb'
-        }}>
-        <Card sx={{ 
-          flex: '0 1 65%',
-          }}>
-          <RouterProvider router={router} />
-        </Card>
-      </div>
+      <RouterProvider router={router} />
     </Box>
   );
 }

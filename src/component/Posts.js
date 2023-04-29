@@ -5,10 +5,12 @@ import { fetchFeed } from '../reducer/PostReducer';
 
 const Posts = () => {
     const { feed } = useSelector(state => state.post);
+    const { user = {} } = useSelector(state => state.user);
+    const { id } = user;
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchFeed('6448c64066394fc33bae3b47'));
+        dispatch(fetchFeed(id));
     }, [dispatch])
     return (
         <div style={{

@@ -2,12 +2,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const userApiUrl = "http://localhost:8080/users";
 
-export const fetch = createAsyncThunk(
-    'user/fetchUser', 
-    async id => {
-        const response = await axios.get(`${userApiUrl}/${id}`);
-        return response.data;
-});
+export const userFetch = async id => axios.get(`${userApiUrl}/${id}`);
+
+export const userFetchByName = async name => axios.get(`${userApiUrl}/name/${name}`);
 
 export const post = async (user) =>  axios.post(userApiUrl, { ...user });
 

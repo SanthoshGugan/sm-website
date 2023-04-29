@@ -1,35 +1,65 @@
 import _ from "lodash";
 import { AppBar, Avatar, IconButton } from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 import DensitySmallIcon from '@mui/icons-material/DensitySmall';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserAsync } from "../reducer/UserReducer";
+import { render } from "@testing-library/react";
+import { createBrowserHistory } from "history";
+import { useNavigate } from "react-router-dom";
+
 
 const AVATAR_STYLE = { height: '1.5rem', width: '1.5rem'};
-const userNotLoggedIn = (<Avatar style={ AVATAR_STYLE }/>);
-const userLoggedInButNoDp = (<Avatar style={{...AVATAR_STYLE, color: 'lightblue' } }/>);
+
+const history = createBrowserHistory()
 
 const Header = () => {
     const { user = {}, loggedInStatus } = useSelector(state => state.user);
 
-    const { profileDpUrl = ""} = user;
+    const { profileDpUrl = "", name = ""} = user;
 
-    const renderAvatar = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // dispatch(fetchUserAsync('6448c64066394fc33bae3b47'))
+    }, [dispatch])
+
+    const handleLoginLogout = () => {
         if (!loggedInStatus) {
-            return userNotLoggedIn;
-        }
-
-        if (_.isEmpty(user.profileDpUrl)) return userLoggedInButNoDp;
-        return (
-            <Avatar sx={ AVATAR_STYLE } src={profileDpUrl} />
-        );
+            navigate('/login')
+        } 
     }
 
+    const renderUser = () => {
+        if (!loggedInStatus) return <></>;
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 
+        '1rem' }}>
+                <div style={{ flex :'1 0.75 auto'}}>{name}</div>
+                {profileDpUrl && (<Avatar sx={ AVATAR_STYLE } src={profileDpUrl} />)}
+            </div>
+        );
+    };
+
+    const renderLoginLogout = () => { 
+        return (
+            <IconButton onClick={() => handleLoginLogout()}>
+                {loggedInStatus ? (<LogoutIcon />) : (<LoginIcon />)}
+            </IconButton>
+        );
+    };
+
     return ( 
+
     <AppBar position='static' sx={{
             display: 'flex',
             justifyContent: 'flex-start',
             flexDirection: 'row',
-            alignItems: 'center'
+            alignItems: 'center',
+            padding: '0 1rem'
     }}>
             <IconButton style={{ flex: '0 0 5%'}}>
                 <DensitySmallIcon style={{ color: 'white'}}/>
@@ -37,8 +67,9 @@ const Header = () => {
             <div style={{ color: 'white', flex: '1 0 auto', fontSize: '1.5rem', fontWeight: '500'}}>
                 The Social Media
             </div>
-            <div style={{ flex: '0 0 5%', display: 'flex', alignContent: 'center'}}>
-                {renderAvatar()}
+            <div style={{ flex: '0.10 0 5%', display: 'flex', alignContent: 'center', justifyContent: 'flex-end'}}>
+                {renderUser()}
+                {renderLoginLogout()}
             </div>
         </AppBar>
         );

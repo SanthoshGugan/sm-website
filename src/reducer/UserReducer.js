@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { fetch, post, del, update } from "../api/UserApis";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { userFetch, userFetchByName } from "../api/UserApis";
+import { STATUS } from "../utils/StatusUtil";
 
 const initialState = {
     user: {},
@@ -20,55 +21,38 @@ const reducers = {
     },
     userUpdated(state, action) {
         state.user = action.payload
-    }
+    },
 };
 
 const extraReducers = builder => {
     builder
-    .addCase(fetch.pending, (state) => {
+    .addCase(fetchUserAsync.pending, (state) => {
         state.status = 'loading';
         state.loggedInStatus = false;
     })
-    .addCase(fetch.fulfilled, (state, action) => {
+    .addCase(fetchUserAsync.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.user = action.payload;
         state.loggedInStatus = true;
     })
-    .addCase(fetch.rejected, (state, action) => {
+    .addCase(fetchUserAsync.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
         state.loggedInStatus = false;
     })
-
-    // [post.pending]: (state) => state.status = 'loading',
-    // [post.fulfilled]: (state, action) => {
-    //     state.status = 'succeeded';
-    //     state.user = action.payload;
-    // },
-    // [post.rejected]: (state, action) => {
-    //     state.status = 'failed';
-    //     state.error = action.error.message;
-    // },
-    
-    // [del.pending]: (state) => state.status = 'loading',
-    // [del.fulfilled]: (state, action) => {
-    //     state.status = 'succeeded';
-    //     state.user = initialState.user;
-    // },
-    // [del.rejected]: (state, action) => {
-    //     state.status = 'failed';
-    //     state.error = action.error.message;
-    // },
-
-    // [update.pending]: (state) => state.status = 'loading',
-    // [update.fulfilled]: (state, action) => {
-    //     state.status = 'succeeded';
-    //     state.user = action.payload;
-    // },
-    // [update.rejected]: (state, action) => {
-    //     state.status = 'failed';
-    //     state.error = action.error.message;
-    // }
+    .addCase(fetchUserByName.pending, state => {
+        state.status = STATUS.LOADING;
+        state.loggedInStatus = false;
+    })
+    .addCase(fetchUserByName.fulfilled, (state, action) => {
+        state.status = STATUS.SUCCEED;
+        state.user = action.payload;
+        state.loggedInStatus = true;
+    })
+    .addCase(fetchUserByName.rejected, state => {
+        state.status = STATUS.FAILED;
+        state.loggedInStatus = false;
+    });
 };
 
 const userSlice = createSlice({
@@ -85,14 +69,20 @@ export const {
     userUpdated
 } = userSlice.actions;
 
-export const fetchUserAsync = (id) => async dispatch => {
-    dispatch(fetch.pending);
-    try {
-        const response = await fetch(id);
-        dispatch(fetch.fulfilled(response.data));
-    } catch (error) {
-        dispatch(fetch.rejected(error.message));
+
+export const fetchUserAsync = createAsyncThunk(
+    'user/fetchUser', 
+    async id => {
+        const response = await userFetch(id);
+        return response.data;
+});
+
+export const fetchUserByName = createAsyncThunk(
+    'user/fetchByName',
+    async name => {
+        const response = await userFetchByName(name);
+        return response.data;
     }
-}
+);
 
 export default userSlice.reducer;

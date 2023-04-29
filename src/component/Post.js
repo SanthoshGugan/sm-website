@@ -5,6 +5,7 @@ import { STATUS } from "../utils/StatusUtil";
 import { Backdrop, Paper } from "@mui/material";
 import { fetchPost } from "../reducer/PostReducer";
 import PostHeader from "./PostHeader";
+import Comments from "./Comments";
 
 
 const Post = () => {
@@ -15,7 +16,7 @@ const Post = () => {
         postStatus: status
     } = useSelector(state => state?.post);
     
-    const { content } = post;
+    const { content, id } = post;
     useEffect(() => {
         dispatch(fetchPost(postId));
     }, [dispatch])
@@ -39,6 +40,9 @@ const Post = () => {
                 justifyContent: 'flex-start'
             }}
             > {content}</div>
+            <div>
+                {id && (<Comments />)}
+            </div>
         </Paper>
     );
 };
