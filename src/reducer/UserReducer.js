@@ -11,6 +11,7 @@ const initialState = {
 
 const reducers = {
     userFetched(state, action) {
+        state.loggedInStatus = true;
         state.user = action.payload
     },
     userDeleted(state, action) {
@@ -22,6 +23,11 @@ const reducers = {
     userUpdated(state, action) {
         state.user = action.payload
     },
+    logoutUser(state, action) {
+        state.user = {};
+        state.status = STATUS.IDLE;
+        state.loggedInStatus = false;
+    }
 };
 
 const extraReducers = builder => {
@@ -66,7 +72,8 @@ export const {
     userFetched,
     userPosted,
     userDeleted,
-    userUpdated
+    userUpdated,
+    logoutUser
 } = userSlice.actions;
 
 

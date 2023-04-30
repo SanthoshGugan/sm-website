@@ -1,11 +1,11 @@
 import _ from "lodash";
-import { AppBar, Avatar, IconButton } from '@mui/material';
+import { AppBar, Avatar, Button, IconButton } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DensitySmallIcon from '@mui/icons-material/DensitySmall';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserAsync } from "../reducer/UserReducer";
+import { fetchUserAsync, logoutUser } from "../reducer/UserReducer";
 import { render } from "@testing-library/react";
 import { createBrowserHistory } from "history";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ const history = createBrowserHistory()
 const Header = () => {
     const { user = {}, loggedInStatus } = useSelector(state => state.user);
 
-    const { profileDpUrl = "", name = ""} = user;
+    const { profileDpUrl = "", name = "", id} = user;
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -28,9 +28,57 @@ const Header = () => {
     }, [dispatch])
 
     const handleLoginLogout = () => {
-        if (!loggedInStatus) {
-            navigate('/login')
+        if (loggedInStatus) {
+            dispatch(logoutUser());
         } 
+        navigate('/login');
+    }
+
+    const gotoFriends = () => {
+        navigate("/friends/"+id);
+    }
+
+    const gotoFeeds = () => {
+        navigate("/posts");
+    }
+
+
+    const renderFeeds = () => {
+        if (!loggedInStatus) return <></>;
+
+        return (
+            <div
+                style={{
+                    display: 'flex', justifyContent: 'center', flex: '0.1 0 auto', alignItems:'center'
+                }}
+            >
+                <Button variant="text"
+                    style={{ color : 'white'}}
+                    onClick={() => gotoFeeds()}
+                >
+                    Feed
+                </Button>
+            </div>
+        );
+    }
+
+    const renderFriends = () => {
+        if (!loggedInStatus) return <></>;
+
+        return (
+            <div
+                style={{
+                    display: 'flex', justifyContent: 'center', flex: '0.1 0 auto', alignItems:'center'
+                }}
+            >
+                <Button variant="text"
+                    style={{ color : 'white'}}
+                    onClick={() => gotoFriends()}
+                >
+                    My Friends
+                </Button>
+            </div>
+        );
     }
 
     const renderUser = () => {
@@ -39,7 +87,7 @@ const Header = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 
         '1rem' }}>
                 <div style={{ flex :'1 0.75 auto'}}>{name}</div>
-                {profileDpUrl && (<Avatar sx={ AVATAR_STYLE } src={profileDpUrl} />)}
+                {/* {profileDpUrl && (<Avatar sx={ AVATAR_STYLE } src={profileDpUrl} />)} */}
             </div>
         );
     };
@@ -67,7 +115,9 @@ const Header = () => {
             <div style={{ color: 'white', flex: '1 0 auto', fontSize: '1.5rem', fontWeight: '500'}}>
                 The Social Media
             </div>
-            <div style={{ flex: '0.10 0 5%', display: 'flex', alignContent: 'center', justifyContent: 'flex-end'}}>
+            <div style={{ flex: '0.10 0 10%', display: 'flex', alignContent: 'center', justifyContent: 'flex-end'}}>
+                {renderFeeds()}
+                {renderFriends()}
                 {renderUser()}
                 {renderLoginLogout()}
             </div>
