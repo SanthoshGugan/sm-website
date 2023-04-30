@@ -42,6 +42,51 @@ const Header = () => {
         navigate("/posts");
     }
 
+    const gotoCreatePost = () => {
+        navigate("/post");
+    }
+
+    const gotoMyPosts = () => {
+        navigate("/myposts");
+    }
+
+    const renderMyPosts = () => {
+        if (!loggedInStatus) return <></>;
+
+        return (
+            <div
+                style={{
+                    display: 'flex', justifyContent: 'center', flex: '0.1 0 auto', alignItems:'center'
+                }}
+            >
+                <Button variant="text"
+                    style={{ color : 'white'}}
+                    onClick={() => gotoMyPosts()}
+                >
+                    My Posts 
+                </Button>
+            </div>
+        );
+    };
+
+    const renderCreatePost = () => {
+        if (!loggedInStatus) return <></>;
+
+        return (
+            <div
+                style={{
+                    display: 'flex', justifyContent: 'center', flex: '0.1 0 auto', alignItems:'center'
+                }}
+            >
+                <Button variant="text"
+                    style={{ color : 'white'}}
+                    onClick={() => gotoCreatePost()}
+                >
+                    Create Post 
+                </Button>
+            </div>
+        );
+    };
 
     const renderFeeds = () => {
         if (!loggedInStatus) return <></>;
@@ -115,7 +160,9 @@ const Header = () => {
             <div style={{ color: 'white', flex: '1 0 auto', fontSize: '1.5rem', fontWeight: '500'}}>
                 The Social Media
             </div>
-            <div style={{ flex: '0.10 0 10%', display: 'flex', alignContent: 'center', justifyContent: 'flex-end'}}>
+            <div style={{ flex: '0.10 0 20%', display: 'flex', alignContent: 'center', justifyContent: 'flex-end'}}>
+                {renderMyPosts()}
+                {renderCreatePost()}
                 {renderFeeds()}
                 {renderFriends()}
                 {renderUser()}

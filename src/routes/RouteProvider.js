@@ -5,6 +5,7 @@ import CreatePost from "./CreatePost/CreatePostRoute";
 import LoginRoute from "./Login/LoginRoute";
 import Root from "../component/Root";
 import FriendsRoute from "./Friends/FriendsRoute";
+import MyPostRoute from "./MyPosts/MyPostRoute";
 
 export const router = createBrowserRouter([
     {
@@ -16,7 +17,8 @@ export const router = createBrowserRouter([
             PostRoute,
             CreatePost,
             LoginRoute,
-            FriendsRoute
+            FriendsRoute,
+            MyPostRoute
         ],
     },
 ]);
