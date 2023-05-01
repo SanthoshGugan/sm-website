@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createPostApi, feedsApi, fetchFeedApi } from "../api/PostApis";
+import { createPostApi, feedsApi, fetchFeedApi, fetchMyPostApi } from "../api/PostApis";
 import { STATUS } from "../utils/StatusUtil";
 
 const {
@@ -16,7 +16,10 @@ const initialState = {
     post: {},
     postStatus: IDLE,
     postError: null,
-    createPostStatus: STATUS.IDLE
+    createPostStatus: STATUS.IDLE,
+    myPosts: [],
+    myPostsStatus: STATUS.IDLE,
+    myPostsError: null,
 };
 
 const reducers = {
@@ -30,6 +33,17 @@ const reducers = {
 
 const extraReducers = builder => {
     builder
+        .addCase(fetchMyPosts.pending, state => {
+            state.myPostsStatus = LOADING;
+        })
+        .addCase(fetchMyPosts.fulfilled, (state, action) => {
+            state.myPostsStatus = SUCCEED;
+            state.myPosts = [...action.payload] || [];
+        })
+        .addCase(fetchMyPosts.rejected, (state, action) => {
+            state.myPostsStatus = FAILED;
+            state.myPostsError = action.error?.message || action.reason;
+        })  
         .addCase(fetchFeed.pending, state => {
             state.feedStatus = LOADING;
         })
@@ -69,6 +83,14 @@ const postSlice = createSlice({
     reducers,
     extraReducers
 });
+
+export const fetchMyPosts = createAsyncThunk(
+    'myPosts',
+    async id => {
+        const resp = await fetchMyPostApi(id);
+        return resp.data;
+    }
+)
 
 
 export const fetchFeed = createAsyncThunk(

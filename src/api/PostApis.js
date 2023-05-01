@@ -2,6 +2,7 @@ import axios from "axios";
 
 const postApiUrl = "http://localhost:8080/post";
 
+export const fetchMyPostApi = async userId => axios.get(`${postApiUrl}/user/${userId}`);
 
 export const feedsApi = async (id) => axios.get(`${postApiUrl}/feeds/${id}`);
 
