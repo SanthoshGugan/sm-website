@@ -1,12 +1,41 @@
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, ClickAwayListener, IconButton, MenuItem, MenuList, Paper, Popper } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import React from "react";
+import React, { useRef, useState } from "react";
 import { getPostInitial } from "../utils/postUtil";
+import { useDispatch, useSelector } from "react-redux";
+import { deletePost } from "../reducer/PostReducer";
+import { useNavigate } from "react-router-dom";
 
 const PostHeader = (props) => {
 
-    const { post = {} } = props;
-    const { authorName = "" } = post;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const { user } = useSelector(state => state.user);
+    const { id: userId } = user;
+
+    const { post = {}, showOptions = false } = props;
+    const [openPopper, setOpenPopper] = useState(false);
+    const [anchorRef, setAnchorRef] = useState(null);
+    const { authorName = "", id, authorId } = post;
+
+    const handlePopperOpen = (e) => {
+        setOpenPopper(!openPopper);
+        setAnchorRef(e.currentTarget)
+    };
+
+    const handleDeletePost = () => {
+        dispatch(deletePost(id));
+        navigate("/myposts");
+    };
+
+    const renderPostOptions = () => {
+        return (
+        <IconButton ref={anchorRef} onClick={e => handlePopperOpen(e)}>
+            <MoreVertIcon />
+        </IconButton>
+        );
+    }
 
     return (
         <div
@@ -28,9 +57,29 @@ const PostHeader = (props) => {
                 <div>{authorName}</div>
             </div>
             <div>
-            <IconButton aria-label="Example">
-                <MoreVertIcon />
-            </IconButton>
+            
+            {showOptions && renderPostOptions()}
+            <Popper
+                open={openPopper}
+                anchorEl={anchorRef}
+            >
+                <Paper>
+                    <ClickAwayListener 
+                        onClickAway={() => setOpenPopper(false)}
+                    >
+                        <MenuList autoFocusItem>
+                            <MenuItem 
+                                key="delete"
+                                onClick={() => handleDeletePost()}
+                            >
+                                Delete Post
+                            </MenuItem>
+                        </MenuList>
+
+                    </ClickAwayListener>
+                </Paper>
+
+            </Popper>
             </div>
         </div>
     );

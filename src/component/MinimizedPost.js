@@ -33,7 +33,7 @@ const MinimizedPost = (props) => {
                 flex: '0 1 25%'
                 }}
             > 
-                <PostHeader post={post}/>
+                <PostHeader post={post} showOptions={false}/>
             </div>
             <div style={{
                 flex: '1 0.25 100px',

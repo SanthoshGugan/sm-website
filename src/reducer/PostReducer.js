@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createPostApi, feedsApi, fetchFeedApi, fetchMyPostApi } from "../api/PostApis";
+import { createPostApi, deletePostApi, feedsApi, fetchFeedApi, fetchMyPostApi } from "../api/PostApis";
 import { STATUS } from "../utils/StatusUtil";
 
 const {
@@ -20,6 +20,7 @@ const initialState = {
     myPosts: [],
     myPostsStatus: STATUS.IDLE,
     myPostsError: null,
+    deletePostStatus: STATUS.IDLE
 };
 
 const reducers = {
@@ -74,6 +75,15 @@ const extraReducers = builder => {
         })
         .addCase(createPost.rejected, (state) => {
             state.createPostStatus = FAILED;
+        })
+        .addCase(deletePost.pending, state => {
+            state.deletePostStatus = LOADING
+        })
+        .addCase(deletePost.fulfilled, (state) => {
+            state.deletePostStatus = SUCCEED;
+        })
+        .addCase(deletePost.rejected, (state) => {
+            state.deletePostStatus = FAILED;
         });    
 };
 
@@ -116,6 +126,13 @@ export const createPost = createAsyncThunk(
         return resp.data;
     }
 )
+
+export const deletePost = createAsyncThunk(
+    'post/delete',
+    async id => {
+        await deletePostApi(id);
+    }
+);
 
 export const {
     feedFetched,

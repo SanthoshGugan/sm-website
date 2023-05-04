@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { commentsByPost } from "../api/CommentApi";
 import { commentsFetched } from "../reducer/CommentReducer";
-import { render } from "@testing-library/react";
 
 const Comments = () => {
     const dispatch = useDispatch();
@@ -44,7 +43,7 @@ const Comments = () => {
                         justifyContent: 'flex-start',
                         borderBottom: '1px solid #bfbfbf',
                         backgroundColor: '#f2f2f2',
-                        padding: '0.3rem 0.1rem',
+                        padding: '0.3rem 0.5rem',
                         borderRadius: '0.7rem'
                     }}><>{authorName}</></div>
                     <div style={{

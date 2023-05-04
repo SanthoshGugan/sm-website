@@ -16,7 +16,10 @@ const Post = () => {
         postStatus: status
     } = useSelector(state => state?.post);
     
-    const { content, id } = post;
+    const { user = {} } = useSelector(state => state.user);
+    const { id: userId } = user;
+
+    const { content, id, authorId } = post;
     useEffect(() => {
         dispatch(fetchPost(postId));
     }, [dispatch])
@@ -31,7 +34,7 @@ const Post = () => {
                 flex: '0 1 25%'
                 }}
             > 
-                <PostHeader post={post}/>
+                <PostHeader post={post} showOptions={authorId == userId}/>
             </div>
             <div style={{
                 flex: '1 0.25 100px',

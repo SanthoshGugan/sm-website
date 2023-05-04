@@ -10,3 +10,5 @@ export const fetchFeedApi = async (id) => axios.get(`${postApiUrl}/feed/${id}`)
 
 export const createPostApi = async post => axios.post(`${postApiUrl}`, {...post});
 
+export const deletePostApi = async id => axios.delete(`${postApiUrl}/${id}`);
+
