@@ -8,6 +8,7 @@ import FriendsRoute from "./Friends/FriendsRoute";
 import MyPostRoute from "./MyPosts/MyPostRoute";
 import ProtectedRoute from "../component/ProtectedRoute";
 import Login from "../component/Login";
+import EditRouter from "./EditPost/EditPostRoute";
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
             PostsRoute,
             PostRoute,
             CreatePost,
+            EditRouter,
             LoginRoute,
             FriendsRoute,
             MyPostRoute,

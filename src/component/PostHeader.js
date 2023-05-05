@@ -3,7 +3,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React, { useRef, useState } from "react";
 import { getPostInitial } from "../utils/postUtil";
 import { useDispatch, useSelector } from "react-redux";
-import { deletePost } from "../reducer/PostReducer";
+import { deletePost, editPostInit } from "../reducer/PostReducer";
 import { useNavigate } from "react-router-dom";
 
 const PostHeader = (props) => {
@@ -22,6 +22,11 @@ const PostHeader = (props) => {
     const handlePopperOpen = (e) => {
         setOpenPopper(!openPopper);
         setAnchorRef(e.currentTarget)
+    };
+
+    const handleEditPost = () => {
+        dispatch(editPostInit({...post}));
+        navigate("/post/edit");
     };
 
     const handleDeletePost = () => {
@@ -68,6 +73,12 @@ const PostHeader = (props) => {
                         onClickAway={() => setOpenPopper(false)}
                     >
                         <MenuList autoFocusItem>
+                            <MenuItem 
+                                key="edit"
+                                onClick={() => handleEditPost()}
+                            >
+                                Edit Post
+                            </MenuItem>
                             <MenuItem 
                                 key="delete"
                                 onClick={() => handleDeletePost()}

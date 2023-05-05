@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createPostApi, deletePostApi, feedsApi, fetchFeedApi, fetchMyPostApi } from "../api/PostApis";
+import { createPostApi, deletePostApi, editPostApi, feedsApi, fetchFeedApi, fetchMyPostApi } from "../api/PostApis";
 import { STATUS } from "../utils/StatusUtil";
 
 const {
@@ -20,6 +20,8 @@ const initialState = {
     myPosts: [],
     myPostsStatus: STATUS.IDLE,
     myPostsError: null,
+    editPost: {},
+    editPostStatus: STATUS.IDLE,
     deletePostStatus: STATUS.IDLE
 };
 
@@ -29,6 +31,9 @@ const reducers = {
     },
     postFetched(state, action) {
         state.post = action.payload;
+    },
+    editPostInit(state, action) {
+        state.editPost = action.payload;
     }
 };
 
@@ -75,6 +80,15 @@ const extraReducers = builder => {
         })
         .addCase(createPost.rejected, (state) => {
             state.createPostStatus = FAILED;
+        })
+        .addCase(editPostAsync.pending, state => {
+            state.editPostStatus = LOADING
+        })
+        .addCase(editPostAsync.fulfilled, (state) => {
+            state.editPostStatus = SUCCEED;
+        })
+        .addCase(editPostAsync.rejected, (state) => {
+            state.editPostStatus = FAILED;
         })
         .addCase(deletePost.pending, state => {
             state.deletePostStatus = LOADING
@@ -125,7 +139,17 @@ export const createPost = createAsyncThunk(
         const resp = await createPostApi(post);
         return resp.data;
     }
-)
+);
+
+export const editPostAsync = createAsyncThunk(
+    'post/edit',
+    async ({id, post}) => {
+        console.log("edit post submit " + JSON.stringify(post));
+        const resp = await editPostApi(id, post);
+        return resp.data;
+        
+    }
+);
 
 export const deletePost = createAsyncThunk(
     'post/delete',
@@ -136,7 +160,8 @@ export const deletePost = createAsyncThunk(
 
 export const {
     feedFetched,
-    postFetched
+    postFetched,
+    editPostInit
 } = postSlice.actions;
 
 export default postSlice.reducer;

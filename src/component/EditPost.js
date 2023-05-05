@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
-import { createPost } from "../reducer/PostReducer";
+import { createPost, editPostAsync } from "../reducer/PostReducer";
 import { Alert, IconButton, Snackbar, TextareaAutosize } from "@mui/material";
 import { STATUS } from "../utils/StatusUtil";
 
-const CreatePost = () => {
+const EditPost = () => {
     const dispatch = useDispatch();
 
     const { user = {} } = useSelector(state => state.user);
-    const { createPostStatus: status } = useSelector(state => state.post);
+    const { editPostStatus: status, editPost = {} } = useSelector(state => state.post);
+    
     const { id } = user;
+    const { content: postContent, id: editPostId } = editPost;
 
-    const [content, setContent] = useState("");
+    const [content, setContent] = useState(postContent);
     const [openSuccessNotif, setOpenSuccessNotif] = useState(false);
 
     useEffect(() => {
         if (status == STATUS.SUCCEED) {
             setOpenSuccessNotif(true);
-            setContent("");
         }
     }, [status]);
 
     const onSubmit = () => {
-        const post = {
-            content,
-            authorId: id
+        const updatedPost = {
+            ...editPost,
+            content
         }
-        dispatch(createPost(post));
+        dispatch(editPostAsync({id: editPostId, post: updatedPost}));
         
     }
 
@@ -56,7 +57,7 @@ const CreatePost = () => {
             />
             <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 2rem', flex: '1 1 auto'}}>
                 <IconButton onClick={() => onSubmit()}>
-                    <AddIcon /> Post
+                    <AddIcon /> Submit
                 </IconButton>
 
             </div>
@@ -66,11 +67,11 @@ const CreatePost = () => {
                 autoHideDuration={500}
             >
                 <Alert onClose={handleNotifClose} severity="success" sx={{ width: '100%' }}>
-                    Post successfully created
+                    Post edited successfully
                 </Alert>
             </Snackbar>
         </div>
     );
 };
 
-export default CreatePost;
+export default EditPost;
