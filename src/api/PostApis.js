@@ -14,3 +14,4 @@ export const editPostApi = async (id, post) => axios.put(`${postApiUrl}/${id}`, 
 
 export const deletePostApi = async id => axios.delete(`${postApiUrl}/${id}`);
 
+
