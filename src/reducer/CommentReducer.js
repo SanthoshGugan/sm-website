@@ -1,24 +1,46 @@
-import { createCommentApi, deleteCommentApi, updateCommentApi } from "../api/CommentApi";
+import { commentsByPost, createCommentApi, deleteCommentApi, updateCommentApi } from "../api/CommentApi";
+import { COMMENT_BOX_MODE } from "../utils/CommentUtil";
 import { STATUS } from "../utils/StatusUtil";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState= {
     comments: [],
+    editComment: {},
     commentStatus: STATUS.IDLE,
     commentsError : null,
+    commentsFetchStatus: STATUS.IDLE,
     createCommentStatus: STATUS.IDLE,
     deleteCommentStatus: STATUS.IDLE,
-    editCommentStatus: STATUS.IDLE
+    editCommentStatus: STATUS.IDLE,
+    commentBoxMode: COMMENT_BOX_MODE.DEFAULT,
 };
 
 const reducers = {
     commentsFetched(state, action) {
         state.comments = action.payload;
+    },
+    setCommentBoxMode(state, action) {
+        state.commentBoxMode = action.payload;
+    },
+    onEditComment(state, action) {
+        state.editComment = { ...action.payload };
+        state.commentBoxMode = COMMENT_BOX_MODE.EDIT;
     }
 };
 
 const extraReducers = builder => {
-    builder.addCase(createComment.pending, state => {
+    builder
+    .addCase(fetchComments.pending, state => {
+        state.commentsFetchStatus = STATUS.LOADING;
+    })
+    .addCase(fetchComments.fulfilled, (state, action) => {
+        state.commentsFetchStatus = STATUS.SUCCEED;
+        state.comments = [...action.payload] || [];
+    })
+    .addCase(fetchComments.rejected, state => {
+        state.commentsFetchStatus = STATUS.FAILED;
+    })
+    .addCase(createComment.pending, state => {
         state.createCommentStatus = STATUS.LOADING;
     })
     .addCase(createComment.fulfilled, (state, action) => {
@@ -55,6 +77,14 @@ const commentsSlice = createSlice({
     extraReducers
 });
 
+export const fetchComments = createAsyncThunk(
+    'comments/fetch',
+    async postId => {
+        const resp = await commentsByPost(postId);
+        return resp.data;
+    }
+);
+
 export const createComment = createAsyncThunk(
     'comment/create',
     async comment => {
@@ -78,7 +108,9 @@ export const deleteComment = createAsyncThunk(
 );
 
 export const {
-    commentsFetched
+    commentsFetched,
+    setCommentBoxMode,
+    onEditComment
 } = commentsSlice.actions;
 
 export default commentsSlice.reducer;

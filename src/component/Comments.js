@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { commentsByPost } from "../api/CommentApi";
-import { commentsFetched, deleteComment } from "../reducer/CommentReducer";
+import { deleteComment, fetchComments, onEditComment } from "../reducer/CommentReducer";
 import CreateComment from "./CreateComment";
 import { Divider, IconButton } from "@mui/material";
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
 const Comments = () => {
@@ -15,29 +15,28 @@ const Comments = () => {
     const { id, authorId: postAuthorId } = post;
     const {id : userId = "" } = user;
 
-    const { comments = [] } = useSelector(state =>  state.comment);
-    
+    const { comments = [], editCommentStatus, deleteCommentStatus } = useSelector(state =>  state.comment);
     useEffect(() => {
-        commentsFetched([]);
-        fetchComment();
-    }, [id]);
+        dispatch(fetchComments(id));
 
-    const fetchComment = async () => {
-        const resp = await commentsByPost(id);
-        dispatch(commentsFetched(resp.data));
+    }, [id, editCommentStatus, deleteCommentStatus]);
+
+    const onUpdateCommentHandle = (comment) => {
+        dispatch(onEditComment(comment))
     };
 
     const onDeleteComment = (id) => {
         dispatch(deleteComment(id));
-        fetchComment();
+        dispatch(fetchComments(id));
     }
 
-    const renderComment = ({ 
-        content = "", 
-        author_name: authorName = "",
-        author_id: authorId,
-        id
-    }) => {
+    const renderComment = (comment) => {
+        const { 
+            content = "", 
+            author_name: authorName = "",
+            author_id: authorId,
+            id
+        } = comment;
         return (
             <div style={{
                 display: "flex",
@@ -57,13 +56,27 @@ const Comments = () => {
                         borderRadius: '0.7rem'
                     }}>
                         <>{authorName}</>
-                        <>{ (authorId == userId || postAuthorId == userId) &&
-                        (<IconButton
-                            onClick={() => onDeleteComment(id)}
-                        >
-                            <DeleteTwoToneIcon />
-                        </IconButton>)}
-                        </>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            gap: '1rem'
+                        }}>
+
+                            {(authorId == userId) &&
+                                (<IconButton
+                                    onClick={() => onUpdateCommentHandle(comment)}
+                                >
+                                    <EditRoundedIcon />
+                                </IconButton>
+                            )}
+                            {(authorId == userId || postAuthorId == userId) &&
+                                (<IconButton
+                                    onClick={() => onDeleteComment(id)}
+                                >
+                                    <DeleteTwoToneIcon />
+                                </IconButton>
+                            )}
+                        </div>
 
                     </div>
                     <div style={{

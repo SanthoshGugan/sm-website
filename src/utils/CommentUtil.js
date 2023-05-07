@@ -1,0 +1,5 @@
+export const COMMENT_BOX_MODE = {
+    CREATE: "create",
+    EDIT: "edit"
+};
+COMMENT_BOX_MODE.DEFAULT = COMMENT_BOX_MODE.CREATE;
