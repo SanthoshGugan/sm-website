@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { userFetch, userFetchByName } from "../api/UserApis";
+import { post, postUserApi, userFetch, userFetchByName } from "../api/UserApis";
 import { STATUS } from "../utils/StatusUtil";
 
 const initialState = {
     user: {},
     status: 'idle',
     error: null,
-    loggedInStatus: false
+    loggedInStatus: false,
+    signUpStatus: STATUS.IDLE
 };
 
 const reducers = {
@@ -27,6 +28,9 @@ const reducers = {
         state.user = {};
         state.status = STATUS.IDLE;
         state.loggedInStatus = false;
+    },
+    setSignUpStatus(state, action) {
+        state.signUpStatus = action.payload || STATUS.IDLE;
     }
 };
 
@@ -58,6 +62,19 @@ const extraReducers = builder => {
     .addCase(fetchUserByName.rejected, state => {
         state.status = STATUS.FAILED;
         state.loggedInStatus = false;
+    })
+    .addCase(signUpUser.pending, state => {
+        state.signUpStatus = STATUS.LOADING;
+        state.loggedInStatus = false;
+    })
+    .addCase(signUpUser.fulfilled, (state, action) => {
+        state.signUpStatus = STATUS.SUCCEED;
+        state.user = action.payload;
+        state.loggedInStatus = true;
+    })
+    .addCase(signUpUser.rejected, state => {
+        state.signUpStatus = STATUS.FAILED;
+        state.loggedInStatus = false;
     });
 };
 
@@ -73,7 +90,8 @@ export const {
     userPosted,
     userDeleted,
     userUpdated,
-    logoutUser
+    logoutUser,
+    setSignUpStatus
 } = userSlice.actions;
 
 
@@ -88,6 +106,14 @@ export const fetchUserByName = createAsyncThunk(
     'user/fetchByName',
     async name => {
         const response = await userFetchByName(name);
+        return response.data;
+    }
+);
+
+export const signUpUser = createAsyncThunk(
+    'user/create',
+    async newUser => {
+        const response = await postUserApi(newUser);
         return response.data;
     }
 );

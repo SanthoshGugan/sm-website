@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchUserByName, userFetched } from "../reducer/UserReducer";
 import { userFetchByName } from "../api/UserApis";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [name, setName] = useState("");
@@ -26,7 +26,8 @@ const Login = () => {
                     onChange={e => setName(e.target.value)}
                 />
             </div>
-            <div style={{ display: 'flex', alignItems: 'flex-end', flex: '0.3 0 auto' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', flex: '0.3 0 auto', width: '100%', justifyContent: 'center', gap: '2rem', alignItems: 'center' }}>
+                <Link to="/signup">Dont have account? Please up</Link>
                 <Button variant="contained" endIcon={<SendIcon />} onClick={(e) => handleSubmit()}>
                     Login
                 </Button>

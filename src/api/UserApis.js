@@ -6,7 +6,7 @@ export const userFetch = async id => axios.get(`${userApiUrl}/${id}`);
 
 export const userFetchByName = async name => axios.get(`${userApiUrl}/name/${name}`);
 
-export const post = async (user) =>  axios.post(userApiUrl, { ...user });
+export const postUserApi = async (user) =>  axios.post(`${userApiUrl}/name`, { ...user });
 
 export const del = async (id) => axios.delete(`${userApiUrl}/${id}`);
 
