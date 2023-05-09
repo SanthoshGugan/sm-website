@@ -27,7 +27,7 @@ const Login = () => {
                 />
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end', flex: '0.3 0 auto', width: '100%', justifyContent: 'center', gap: '2rem', alignItems: 'center' }}>
-                <Link to="/signup">Dont have account? Please up</Link>
+                <Link to="/signup">Dont have account? Sign up</Link>
                 <Button variant="contained" endIcon={<SendIcon />} onClick={(e) => handleSubmit()}>
                     Login
                 </Button>

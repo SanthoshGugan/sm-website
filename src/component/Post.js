@@ -2,10 +2,13 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { STATUS } from "../utils/StatusUtil";
-import { Backdrop, Paper } from "@mui/material";
-import { fetchPost } from "../reducer/PostReducer";
+import { Backdrop, Button, Paper } from "@mui/material";
+import ThumbUpOffAltSharpIcon from '@mui/icons-material/ThumbUpOffAltSharp';
+
+import { addLike, fetchPost, likeByUserAndPost, removeLike, updateLikeToPost } from "../reducer/PostReducer";
 import PostHeader from "./PostHeader";
 import Comments from "./Comments";
+import { ThumbUpOffAltOutlined } from "@mui/icons-material";
 
 
 const Post = () => {
@@ -13,16 +16,33 @@ const Post = () => {
     const dispatch = useDispatch();
     const { 
         post,
-        postStatus: status
+        postStatus: status,
+        userLikedPost
     } = useSelector(state => state?.post);
     
     const { user = {} } = useSelector(state => state.user);
     const { id: userId } = user;
 
-    const { content, id, authorId } = post;
+    const { content, id, authorId, likes = 0 } = post;
     useEffect(() => {
         dispatch(fetchPost(postId));
-    }, [dispatch])
+        dispatch(likeByUserAndPost({ postId, userId }))
+    }, [dispatch, userLikedPost])
+
+    const onLikeClick = () => {
+        if (userLikedPost) {
+            dispatch(updateLikeToPost({ userId, postId: id, post, isIncrement: false }));
+
+            dispatch(removeLike({ userId, postId }));
+            dispatch(fetchPost(postId));;
+        } else {
+            dispatch(updateLikeToPost({userId, postId, post, isIncrement: true }));
+            dispatch(addLike({ userId, postId }));
+            dispatch(fetchPost(postId));
+        }
+        dispatch(likeByUserAndPost({postId, userId}));
+    };
+
     return (
         <Paper sx={{ 
             display: 'flex' ,
@@ -43,6 +63,27 @@ const Post = () => {
                 justifyContent: 'flex-start'
             }}
             > {content}</div>
+
+<div
+                style={{
+                    flex: '0 0.1 4rem',
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignContent: 'center'
+                }}
+            >
+                <div 
+                    style={{
+                        margin: '0 2rem'
+                    }}
+                >
+                    <Button variant={userLikedPost ? "contained" : "outlined"} endIcon={userLikedPost ? <ThumbUpOffAltSharpIcon /> : <ThumbUpOffAltOutlined />}
+                        onClick={() => onLikeClick()}
+                    >
+                        <div style={{ margin: '0.4rem 0 0 0'}}>{likes || ''}</div>
+                    </Button>
+                </div>
+            </div>
             <div>
                 {id && (<Comments />)}
             </div>

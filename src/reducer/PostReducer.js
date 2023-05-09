@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createPostApi, deletePostApi, editPostApi, feedsApi, fetchFeedApi, fetchMyPostApi } from "../api/PostApis";
 import { STATUS } from "../utils/StatusUtil";
+import { createLikeByUserAndPostApi, deleteLikeByUserAndPostApi, likeByUserAndPostApi } from "../api/LikeApi";
+import { useDispatch } from "react-redux";
 
 const {
     IDLE,
@@ -22,7 +24,9 @@ const initialState = {
     myPostsError: null,
     editPost: {},
     editPostStatus: STATUS.IDLE,
-    deletePostStatus: STATUS.IDLE
+    deletePostStatus: STATUS.IDLE,
+    userLikedPost: false,
+    likeByUserAndPostStatus: STATUS.IDLE,
 };
 
 const reducers = {
@@ -98,6 +102,16 @@ const extraReducers = builder => {
         })
         .addCase(deletePost.rejected, (state) => {
             state.deletePostStatus = FAILED;
+        })
+        .addCase(likeByUserAndPost.pending, state => {
+            state.likeByUserAndPostStatus = LOADING;
+        })
+        .addCase(likeByUserAndPost.fulfilled, (state, action) => {
+            state.likeByUserAndPostStatus = SUCCEED;
+            state.userLikedPost = action?.payload?.userLiked || false;
+        })
+        .addCase(likeByUserAndPost.rejected, (state) => {
+            state.likeByUserAndPostStatus = FAILED;
         });    
 };
 
@@ -158,10 +172,55 @@ export const deletePost = createAsyncThunk(
     }
 );
 
+export const updateLikeToPost = createAsyncThunk(
+    'like/user/post/add',
+    async ({userId, postId, post, isIncrement }) => {
+        const updatedPost = {
+            ...post,
+            likes: isIncrement ? post.likes + 1 : post.likes - 1 || 0
+        };
+        
+        const resp = await editPostApi(postId, updatedPost);
+        return resp.data;
+        // await likeByUserAndPostApi(postId, userId);
+    }
+);
+
+export const addLike = createAsyncThunk(
+    'like/user/post/add',
+    async ({userId, postId }) => {
+        const like = {
+            postId,
+            userId
+        };
+        
+        const resp = await createLikeByUserAndPostApi(like);
+        return resp.data;
+    }
+);
+
+
+export const removeLike = createAsyncThunk(
+    'like/user/post/remove',
+    async ({userId, postId }) => {
+        const resp = await deleteLikeByUserAndPostApi(postId, userId);
+        return resp.data;
+    }
+);
+
+export const likeByUserAndPost = createAsyncThunk(
+    'like/post/user',
+    async ({postId, userId}) => {
+        const resp = await likeByUserAndPostApi(postId, userId);
+        return resp.data;
+    }
+)
+
 export const {
     feedFetched,
     postFetched,
-    editPostInit
+    editPostInit,
+    onLikeHandler
 } = postSlice.actions;
 
 export default postSlice.reducer;
