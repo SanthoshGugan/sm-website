@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# The Social Media Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains the frontend code for "The Social Media" application. It is built using ReactJS, HTML, and CSS, with state management handled by Redux. Material UI is used as the design system for consistent and visually appealing components. The frontend connects to a Java backend for data retrieval and manipulation. The app also utilizes various libraries and tools such as lodash for utilities and react-router for page routing.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- User Authentication: 
+  - Users can sign in with their credentials to access the application.
+  - Protected routes ensure that only signed-in users can access certain pages.
 
-### `npm start`
+- Post Management:
+  - Users can create new posts.
+  - Editing and deleting posts is available for the user's own posts.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Friend Management:
+  - Users can add friends.
+  - Friend recommendations are provided to users.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- News Feed:
+  - Users can view posts from their friends on their news feed.
 
-### `npm test`
+- Comments:
+  - Users can comment on their own or their friends' posts.
+  - Editing and deleting comments is available for the user's own comments.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Likes:
+  - Users can like posts and undo their likes.
+  - The number of likes for each post is displayed.
 
-### `npm run build`
+## Tech Stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The following technologies and tools are used in this project:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- ReactJS: A popular JavaScript library for building user interfaces.
+- HTML and CSS: Markup and styling languages used for creating web pages.
+- Redux: A predictable state container for managing application state.
+- Material UI: A design system and component library for creating visually appealing user interfaces.
+- React Router: A library for handling routing in a React application.
+- lodash: A utility library that provides helpful functions for various JavaScript operations.
+- Java Backend: A Java backend provides the necessary APIs for data retrieval and manipulation.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
 
-### `npm run eject`
+To run the application locally, follow these steps:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Clone this repository to your local machine.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Navigate to the project's root directory in a terminal or command prompt.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. Install the required dependencies by running the following command:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+4. Configure the backend API endpoint in the application code to connect to the Java backend.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+5. Start the application by running the following command:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```bash
+   npm run start
+   ```
 
-### Code Splitting
+   The application will be accessible at `http://localhost:3000`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Now you can explore and use the features of "The Social Media" application.
 
-### Analyzing the Bundle Size
+## Contribution
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Contributions to this project are welcome. Feel free to open issues and submit pull requests to suggest improvements, report bugs, or add new features.
 
-### Making a Progressive Web App
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+This project is licensed under the [MIT License](LICENSE).
 
-### Advanced Configuration
+Please note that the backend Java code is not included in this repository. Make sure to set up and configure the Java backend separately to enable full functionality of the application.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
